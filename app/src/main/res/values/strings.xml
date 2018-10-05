@@ -27,7 +27,13 @@
     <string name="release_date">Release Date:</string>
     <string name="rating">Rating</string>
     <string name="retry">Retry</string>
-    <string name="ss">no Api</string>
+
+    <!-- Sort By Menu Strings -->
+    <string name="sort_by">Sort By</string>
+    <string name="most_popular">Most Popular</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="favorites">Favorites</string>
+    <string name="delete_favorites">Delete Favorites</string>
 
 
 </resources>

@@ -27,6 +27,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
 
     private ArrayList<Results> results;
     private Context context;
+    private static final String SMALL_POSTER_URL = "https://image.tmdb.org/t/p/w200";
 
 
     public MovieRecyclerViewAdapter(Context context, ArrayList<Results> results) {
@@ -49,12 +50,8 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
     public void onBindViewHolder(@NonNull MovieViewHolder holder, final int position) {
 
         // Loading img from Internet with Glide
-
-        String smallPoster = "https://image.tmdb.org/t/p/w200" + results.get(position).getPosterPath();
-
-
         Glide.with(context)
-                .load(smallPoster)
+                .load(SMALL_POSTER_URL + results.get(position).getPosterPath())
                 .into(holder.thumbImg);
 
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
@@ -62,16 +59,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra("title", results.get(position).getTitle());
-                intent.putExtra("overview", results.get(position).getOverview());
-                intent.putExtra("releaseDate", results.get(position).getReleaseDate());
-                intent.putExtra("userRating", results.get(position).getVoteAverage());
-                intent.putExtra("backDrop", results.get(position).getBackdropPath());
-
-
-                String itemClicked = results.get(position).getTitle();
-                Toast.makeText(context, "You clicked: " + itemClicked, Toast.LENGTH_SHORT).show();
-
+                intent.putExtra("Movie Details", results.get(position));
                 context.startActivity(intent);
             }
         });

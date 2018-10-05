@@ -26,14 +26,14 @@
         android:layout_centerInParent="true"
         android:layout_marginBottom="30dp"
         android:contentDescription="@string/no_connection_icon"
-        android:src="@drawable/baseline_wifi_off_black" />
+        android:src="@drawable/ic_signal_wifi_off" />
 
     <TextView
         android:id="@+id/error_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:textColor="#000"
+        android:textColor="#FFF"
         tools:text="Sample Error Text" />
 
     <Button

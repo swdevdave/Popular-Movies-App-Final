@@ -4,15 +4,16 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.swdave.popular_movies_app_final.R;
 import com.swdave.popular_movies_app_final.adapters.MovieRecyclerViewAdapter;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private JsonApi jsonApi;
     private static final String API_KEY = "a1a00c2be1584838bc50f724c943db32";
     private static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
+    private int movieFlag = 1;
 
 
     @Override
@@ -52,9 +54,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Build RetroFit
-
-
-
 
 
         // No Network icon
@@ -85,10 +84,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void checkApi(){
-        if (API_KEY.length() > 1){
+    private void checkApi() {
+        if (API_KEY.length() > 1) {
             initViews();
-        }else {
+        } else {
             errorText.setText("");
             errorText.setVisibility(View.VISIBLE);
             errorText.setText(R.string.no_api_key);
@@ -111,11 +110,18 @@ public class MainActivity extends AppCompatActivity {
         jsonApi = retrofit.create(JsonApi.class);
     }
 
-    private void callPopularMovies() {
+
+    private void callMovies() {
         Log.d(TAG, "callPopularMovies: Started");
 
-
         Call<JSONResponse> call = jsonApi.getPopular(API_KEY);
+
+        if (movieFlag == 1) {
+            call = jsonApi.getPopular(API_KEY);
+        } else if (movieFlag == 2) {
+            call = jsonApi.getTopRated(API_KEY);
+        }
+
 
         call.enqueue(new Callback<JSONResponse>() {
             @Override
@@ -141,10 +147,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void initViews() {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);
 
         // spaces out grid evenly
@@ -175,9 +182,37 @@ public class MainActivity extends AppCompatActivity {
         });
 
         buildBaseUrl();
-
-        callPopularMovies();
+        callMovies();
 
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_sort, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sort_by_popular:
+                movieFlag = 1;
+                callMovies();
+                return true;
+            case R.id.sort_by_top_rated:
+                movieFlag = 2;
+                callMovies();
+                return true;
+            case R.id.sort_by_favorites:
+                // Do this
+                return true;
+            case R.id.delete_favs:
+                // Do this
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
+
