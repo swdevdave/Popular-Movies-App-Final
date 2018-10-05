@@ -1,4 +1,4 @@
-package com.swdave.popular_movies_app_final.activites;
+package com.swdave.popular_movies_app_final.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -32,14 +32,14 @@ public class DetailActivity extends AppCompatActivity {
                 && getIntent().hasExtra("overview")
                 && getIntent().hasExtra("releaseDate")
                 && getIntent().hasExtra("userRating")
-                && getIntent().hasExtra("posterUrl")) {
+                && getIntent().hasExtra("backDrop")) {
             Log.d(TAG, "getIncomingIntent: Found Extras");
 
             String title = getIntent().getStringExtra("title");
             String overview = getIntent().getStringExtra("overview");
             String releaseDate = getIntent().getStringExtra("releaseDate");
             String userReview = getIntent().getStringExtra("userRating");
-            String posterUrl = getIntent().getStringExtra("posterUrl");
+            String posterUrl = getIntent().getStringExtra("backDrop");
 
             setDetail(title, overview, releaseDate, userReview, posterUrl);
             Log.d(TAG, "getIncomingIntent: Intents completed");
@@ -61,7 +61,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView movieReleaseDate = findViewById(R.id.release_date_data);
         movieReleaseDate.setText(releaseDate);
 
-        ImageView image = findViewById(R.id.movie_poster);
+        ImageView image = findViewById(R.id.movie_backdrop);
         Glide.with(this)
                 .load(posterUrl)
                 .into(image);

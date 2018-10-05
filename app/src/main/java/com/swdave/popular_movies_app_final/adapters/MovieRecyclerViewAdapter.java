@@ -14,22 +14,24 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import com.bumptech.glide.request.RequestOptions;
 import com.swdave.popular_movies_app_final.R;
-import com.swdave.popular_movies_app_final.model.Movies;
+import com.swdave.popular_movies_app_final.activities.DetailActivity;
+import com.swdave.popular_movies_app_final.activities.MainActivity;
 import com.swdave.popular_movies_app_final.model.Results;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecyclerViewAdapter.MovieViewHolder> {
 
-    private Context mContext;
-    private List<Results> mMovieData;
+    private ArrayList<Results> results;
+    private Context context;
 
-    public MovieRecyclerViewAdapter(Context mContext, List<Results> mMovieData) {
 
-        this.mContext = mContext;
-        this.mMovieData = mMovieData;
-
+    public MovieRecyclerViewAdapter(Context context, ArrayList<Results> results) {
+        this.context = context;
+        this.results = results;
 
     }
 
@@ -37,46 +39,48 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view;
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        view = inflater.inflate(R.layout.grid_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.grid_item, parent, false);
 
         return new MovieViewHolder(view);
     }
 
-    @SuppressLint("RecyclerView")
+
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, final int position) {
 
-//        // Loading img from Internet with Glide
-//        Glide.with(mContext)
-//                .load(mMovieData.get(position).getmThumbnailImgUrl())
-//                .into(holder.thumbImg);
-//
-//        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Intent intent = new Intent(mContext, DetailActivity.class);
-//                intent.putExtra("title", mMovieData.get(position).getmTitle());
-//                intent.putExtra("overview", mMovieData.get(position).getmOverview());
-//                intent.putExtra("releaseDate", mMovieData.get(position).getmReleaseDate());
-//                intent.putExtra("userRating", mMovieData.get(position).getmUserRating());
-//                intent.putExtra("posterUrl", mMovieData.get(position).getmPosterUrl());
-//
-//
-//                String itemClicked = mMovieData.get(position).getmTitle();
-//                Toast.makeText(mContext, "You clicked: " + itemClicked, Toast.LENGTH_SHORT).show();
-//
-//                mContext.startActivity(intent);
-//            }
-//        });
+        // Loading img from Internet with Glide
+
+        String smallPoster = "https://image.tmdb.org/t/p/w200" + results.get(position).getPosterPath();
+
+
+        Glide.with(context)
+                .load(smallPoster)
+                .into(holder.thumbImg);
+
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("title", results.get(position).getTitle());
+                intent.putExtra("overview", results.get(position).getOverview());
+                intent.putExtra("releaseDate", results.get(position).getReleaseDate());
+                intent.putExtra("userRating", results.get(position).getVoteAverage());
+                intent.putExtra("backDrop", results.get(position).getBackdropPath());
+
+
+                String itemClicked = results.get(position).getTitle();
+                Toast.makeText(context, "You clicked: " + itemClicked, Toast.LENGTH_SHORT).show();
+
+                context.startActivity(intent);
+            }
+        });
 
     }
 
     @Override
     public int getItemCount() {
-        return mMovieData.size();
+        return results.size();
     }
 
     public static class MovieViewHolder extends RecyclerView.ViewHolder {

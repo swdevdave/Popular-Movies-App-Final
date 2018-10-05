@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PopularMoviesApp</string>
+    <string name="app_name">Popular Movies App</string>
     <string name="poster_image">Poster Image</string>
     <string name="no_connection_icon">No Connection Icon</string>
     <string name="network_error">Cannot connect to Internet. Please check your connection!</string>
@@ -14,9 +14,7 @@
     <string name="movie_settings">Movie Settings</string>
 
     <!-- Strings For Order-By Preference [CHAR LIMIT=30] -->
-    <string name="settings_order_by_label">Order By</string>
-    <string name="settings_order_by_key" translatable="false">order_by</string>
-    <string name="settings_order_by_default" translatable="false">@string/settings_order_by_most_popular_value</string>
+
 
     <!-- Label for order-by most popular option [CHAR LIMIT=20] -->
     <string name="settings_order_by_most_popular_label">Most Popular</string>
@@ -29,6 +27,7 @@
     <string name="release_date">Release Date:</string>
     <string name="rating">Rating</string>
     <string name="retry">Retry</string>
+    <string name="ss">no Api</string>
 
 
 </resources>
