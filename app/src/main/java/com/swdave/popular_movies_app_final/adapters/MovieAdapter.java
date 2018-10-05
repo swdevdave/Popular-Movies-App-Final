@@ -1,6 +1,5 @@
 package com.swdave.popular_movies_app_final.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -10,27 +9,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import com.bumptech.glide.request.RequestOptions;
 import com.swdave.popular_movies_app_final.R;
 import com.swdave.popular_movies_app_final.activities.DetailActivity;
-import com.swdave.popular_movies_app_final.activities.MainActivity;
-import com.swdave.popular_movies_app_final.model.Results;
+import com.swdave.popular_movies_app_final.model.MovieResults;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecyclerViewAdapter.MovieViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
-    private ArrayList<Results> results;
+    private ArrayList<MovieResults> results;
     private Context context;
     private static final String SMALL_POSTER_URL = "https://image.tmdb.org/t/p/w200";
 
 
-    public MovieRecyclerViewAdapter(Context context, ArrayList<Results> results) {
+    public MovieAdapter(Context context, ArrayList<MovieResults> results) {
         this.context = context;
         this.results = results;
 
@@ -80,7 +75,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
             super(itemView);
 
             thumbImg = itemView.findViewById(R.id.posterImg);
-            parentLayout = itemView.findViewById(R.id.parent_layout);
+            parentLayout = itemView.findViewById(R.id.movie_parent_layout);
 
         }
 

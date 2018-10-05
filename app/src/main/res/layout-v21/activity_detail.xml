@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/movie_backdrop"
             android:layout_alignEnd="@id/movie_backdrop"
+            android:backgroundTint="@color/colorPrimary"
             android:src="@drawable/ic_star_empty"/>
 
 
@@ -44,10 +45,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
+
                 android:layout_marginTop="5dp"
                 android:textAlignment="center"
                 android:textColor="#FFF"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textSize="30sp"
                 android:textStyle="bold"
                 tools:text="Title" />
 
@@ -108,17 +110,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="30dp"
                 android:textColor="#FFF"
-                tools:text="@tools:sample/lorem/random" />
-
-            <android.support.v7.widget.RecyclerView
-                android:layout_below="@id/synopsis"
-                android:id="@+id/trailer_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fadeScrollbars="false"
-                android:orientation="horizontal"
-                android:scrollbars="horizontal"
-                xmlns:tools="http://schemas.android.com/tools" />
+                tools:text="synopsissynopsissynopsissynopsissynopsissynopsissynopsissynopsissynopsissynopsissynopsissynopsissynopsis" />
 
         </RelativeLayout>
 

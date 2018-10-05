@@ -16,10 +16,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.swdave.popular_movies_app_final.R;
-import com.swdave.popular_movies_app_final.adapters.MovieRecyclerViewAdapter;
+import com.swdave.popular_movies_app_final.adapters.MovieAdapter;
 import com.swdave.popular_movies_app_final.api.JsonApi;
-import com.swdave.popular_movies_app_final.model.JSONResponse;
-import com.swdave.popular_movies_app_final.model.Results;
+import com.swdave.popular_movies_app_final.model.MovieResponse;
+import com.swdave.popular_movies_app_final.model.MovieResults;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,16 +34,17 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private ArrayList<Results> results;
+    private ArrayList<MovieResults> results;
     private RecyclerView recyclerView;
-    private MovieRecyclerViewAdapter adapter;
+    private MovieAdapter adapter;
 
     private ProgressBar progressBar;
     private ImageView noConnection;
     private TextView errorText;
     private Button retryButton;
     private JsonApi jsonApi;
-    private static final String API_KEY = "a1a00c2be1584838bc50f724c943db32";
+
+    public static final String API_KEY = "a1a00c2be1584838bc50f724c943db32";
     private static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
     private int movieFlag = 1;
 
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
 
 
-        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.main_recycler_view);
         // Retry button for Errors
         retryButton = findViewById(R.id.reset_button);
         retryButton.setVisibility(View.GONE);
@@ -114,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
     private void callMovies() {
         Log.d(TAG, "callPopularMovies: Started");
 
-        Call<JSONResponse> call = jsonApi.getPopular(API_KEY);
+        Call<MovieResponse> call = jsonApi.getPopular(API_KEY);
 
         if (movieFlag == 1) {
             call = jsonApi.getPopular(API_KEY);
@@ -123,18 +124,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        call.enqueue(new Callback<JSONResponse>() {
+        call.enqueue(new Callback<MovieResponse>() {
             @Override
-            public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
+            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
 
-                JSONResponse jsonResponse = response.body();
-                results = new ArrayList<>(Arrays.asList(jsonResponse.getResults()));
-                adapter = new MovieRecyclerViewAdapter(MainActivity.this, results);
+                MovieResponse jsonMovieResponse = response.body();
+                results = new ArrayList<>(Arrays.asList(jsonMovieResponse.getResults()));
+                adapter = new MovieAdapter(MainActivity.this, results);
                 recyclerView.setAdapter(adapter);
             }
 
             @Override
-            public void onFailure(Call<JSONResponse> call, Throwable t) {
+            public void onFailure(Call<MovieResponse> call, Throwable t) {
                 errorText.setText("");
                 errorText.setVisibility(View.VISIBLE);
                 retryButton.setVisibility(View.VISIBLE);
@@ -149,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void initViews() {
-        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.main_recycler_view);
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(layoutManager);

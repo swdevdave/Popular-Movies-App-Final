@@ -34,6 +34,7 @@
     <string name="top_rated">Top Rated</string>
     <string name="favorites">Favorites</string>
     <string name="delete_favorites">Delete Favorites</string>
+    <string name="movie_trailer">Movie Trailer</string>
 
 
 </resources>
