@@ -26,7 +26,7 @@ public interface JsonApi {
 
     @GET("{id}/reviews")
     Call<ReviewResponse> getReviews(
-            @Path("id") int postId,
+            @Path("id") String postId,
             @Query("api_key") String apiKey
     );
 

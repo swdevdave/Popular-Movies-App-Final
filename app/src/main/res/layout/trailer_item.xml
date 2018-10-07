@@ -3,29 +3,27 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/trailer_parent_layout"
-    android:background="#FFF">
+    android:layout_marginEnd="10dp">
 
     <ImageView
-        android:id="@+id/iv_trailer_image"
+        android:id="@+id/trailer_sample_image"
         android:layout_width="200dp"
         android:layout_height="150dp"
-        android:contentDescription="@string/movie_trailer"
-        android:layout_centerVertical="true"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:layout_marginStart="5dp" />
+        android:contentDescription="@string/trailer" />
 
     <TextView
-        android:id="@+id/tv_trailer_adapter"
-        android:layout_below="@id/iv_trailer_image"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="10dp"
-        android:ellipsize="end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:maxLength="30"
+        android:layout_below="@+id/trailer_sample_image"
+        android:id="@+id/trailer_tv_name"
+        android:layout_width="200dp"
+        android:gravity="center_horizontal"
         android:maxLines="1"
-        android:textColor="@color/black" />
+        android:ellipsize="end"
+        android:layout_height="wrap_content"
+        tools:text="SAMPLE TEXT"
+        android:textColor="#FFF"
+        tools:textColor="@color/black"/>
+
 
 </RelativeLayout>

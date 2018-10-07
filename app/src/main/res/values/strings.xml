@@ -35,6 +35,11 @@
     <string name="favorites">Favorites</string>
     <string name="delete_favorites">Delete Favorites</string>
     <string name="movie_trailer">Movie Trailer</string>
+    <string name="trailer">Trailer</string>
+    <string name="no_trailers_found">No Movie Trailers Found</string>
+    <string name="trailer_parse_error">Error Getting Trailers</string>
+    <string name="no_reviews_found">No Reviews Found</string>
+    <string name="error_parsing_reviews">Error Getting Reviews</string>
 
 
 </resources>

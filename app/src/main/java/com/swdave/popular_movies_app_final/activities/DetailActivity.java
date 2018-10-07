@@ -2,6 +2,7 @@ package com.swdave.popular_movies_app_final.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,9 +15,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.swdave.popular_movies_app_final.R;
+import com.swdave.popular_movies_app_final.adapters.ReviewAdapter;
 import com.swdave.popular_movies_app_final.adapters.TrailerAdapter;
 import com.swdave.popular_movies_app_final.api.JsonApi;
 import com.swdave.popular_movies_app_final.model.MovieResults;
+import com.swdave.popular_movies_app_final.model.ReviewResponse;
 import com.swdave.popular_movies_app_final.model.ReviewResults;
 import com.swdave.popular_movies_app_final.model.TrailerResponse;
 import com.swdave.popular_movies_app_final.model.TrailerResults;
@@ -41,13 +44,25 @@ public class DetailActivity extends AppCompatActivity {
     private JsonApi jsonApi;
     private String mMovieId;
 
-    private ArrayList<TrailerResults> trailerResults;
 
-    private ArrayList<ReviewResults> reviewResults;
-    private RecyclerView reviewRecyclerView;
 
-    private TrailerAdapter trailerAdapter;
-    private RecyclerView trailerRecyclerView;
+
+
+
+    // Trailers
+    private int mTrailerSize = 0;
+    private TextView mTrailersFound;
+    private ArrayList<TrailerResults> mTrailerResults;
+    private TrailerAdapter mTrailerAdapter;
+    private RecyclerView mTrailerRecyclerView;
+
+    //Reviews
+    private int mReviewSize = 0;
+    private TextView mReviewsFound;
+    private ArrayList<ReviewResults> mReviewResults;
+    private ReviewAdapter mReviewAdapter;
+    private RecyclerView mReviewRecyclerView;
+
 
 
 
@@ -60,9 +75,7 @@ public class DetailActivity extends AppCompatActivity {
         getIncomingIntent();
         setTitle(mTitle);
 
-//        trailerRecyclerView = findViewById(R.id.trailer_recycler_view);
-//        trailerRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false));
-//        trailerRecyclerView.setHasFixedSize(true);
+
 
         fab = findViewById(R.id.fab_favorites);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -116,9 +129,11 @@ public class DetailActivity extends AppCompatActivity {
                 .into(image);
         Log.d(TAG, "getIncomingIntent: Intents completed");
 
-        //initTrailerView();
+
         buildBaseUrl();
         callTrailer();
+        callReviews();
+
     }
 
 
@@ -130,42 +145,98 @@ public class DetailActivity extends AppCompatActivity {
                 .build();
 
         jsonApi = retrofit.create(JsonApi.class);
+        initTrailerRecyclerView();
+        initReviewRecyclerView();
     }
 
 
+    private void callReviews() {
+
+        Call<ReviewResponse> call = jsonApi.getReviews(mMovieId, MainActivity.API_KEY);
+
+
+        call.enqueue(new Callback<ReviewResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ReviewResponse> call, @NonNull Response<ReviewResponse> response) {
+
+                ReviewResponse reviewResponse = response.body();
+
+                assert reviewResponse != null;
+                mReviewResults = new ArrayList<>(Arrays.asList(reviewResponse.getReviewResults()));
+                mReviewAdapter = new ReviewAdapter(mReviewResults);
+                mReviewRecyclerView.setAdapter(mReviewAdapter);
+
+                mReviewSize = mReviewResults.size();
+                mReviewsFound = findViewById(R.id.reviews_found);
+
+                if (mReviewSize > 0) {
+                    mReviewsFound.setText("Found " + mReviewSize + " Movie Reviews");
+                } else {
+                    mReviewsFound.setText(R.string.no_reviews_found);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ReviewResponse> call, Throwable t) {
+                mReviewsFound.setText(R.string.error_parsing_reviews);
+                Log.d(TAG, "onFailure: " + t.toString());
+            }
+        });
+
+    }
 
     private void callTrailer() {
         Log.d(TAG, "callPopularMovies: Started");
 
         Call<TrailerResponse> call = jsonApi.getTrailers(mMovieId, MainActivity.API_KEY);
 
-        Log.d(TAG, "callTrailer: " + mMovieId);
+        Log.d(TAG, "\n" + "callTrailer: " + mMovieId + "\n" + "\n");
 
         call.enqueue(new Callback<TrailerResponse>() {
             @Override
-            public void onResponse(Call<TrailerResponse> call, Response<TrailerResponse> response) {
-
+            public void onResponse(@NonNull Call<TrailerResponse> call, @NonNull Response<TrailerResponse> response) {
 
                 TrailerResponse trailerResponse = response.body();
-                trailerResults = new ArrayList<>(Arrays.asList(trailerResponse.getResults()));
 
-//                trailerAdapter = new TrailerAdapter(DetailActivity.this, trailerResults);
-//                trailerRecyclerView.setAdapter(trailerAdapter);
+                assert trailerResponse != null;
+                mTrailerResults = new ArrayList<>(Arrays.asList(trailerResponse.getResults()));
+                mTrailerAdapter = new TrailerAdapter(mTrailerResults, getApplicationContext());
+                mTrailerRecyclerView.setAdapter(mTrailerAdapter);
 
-                Log.d(TAG, "onResponse: " + trailerResults.get(0).getName());
-                Log.d(TAG, "onResponse: " + trailerResults.get(0).getKey());
+                mTrailerSize = mTrailerResults.size();
+                mTrailersFound = findViewById(R.id.trailers_found);
 
-                Log.d(TAG, "onResponse: " + trailerResults.size());
-
+                if (mTrailerSize > 0) {
+                    mTrailersFound.setText("Found " + mTrailerSize + " Movie Trailers");
+                } else {
+                    mTrailersFound.setText(R.string.no_trailers_found);
+                }
 
             }
 
             @Override
-            public void onFailure(Call<TrailerResponse> call, Throwable t) {
-                Toast.makeText(DetailActivity.this, "Error" + t.getMessage(), Toast.LENGTH_SHORT).show();
-
+            public void onFailure(@NonNull Call<TrailerResponse> call, Throwable t) {
+                mTrailersFound.setText(R.string.trailer_parse_error);
+                Log.d(TAG, "onFailure: " + t.toString());
             }
         });
+
+    }
+
+    private void initTrailerRecyclerView(){
+
+        mTrailerRecyclerView = findViewById(R.id.trailer_rv);
+        mTrailerRecyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false);
+        mTrailerRecyclerView.setLayoutManager(layoutManager);
+
+    }
+
+    private void initReviewRecyclerView(){
+        mReviewRecyclerView = findViewById(R.id.reviews_rv);
+        mReviewRecyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        mReviewRecyclerView.setLayoutManager(layoutManager);
 
     }
 }
