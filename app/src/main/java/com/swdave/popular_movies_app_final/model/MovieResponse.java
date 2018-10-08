@@ -7,5 +7,4 @@ public class MovieResponse {
     public MovieResults[] getResults() {
         return results;
     }
-
 }

@@ -1,8 +1,11 @@
 package com.swdave.popular_movies_app_final.api;
 
 import com.swdave.popular_movies_app_final.model.MovieResponse;
+import com.swdave.popular_movies_app_final.model.MovieResults;
 import com.swdave.popular_movies_app_final.model.ReviewResponse;
 import com.swdave.popular_movies_app_final.model.TrailerResponse;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

@@ -1,5 +1,6 @@
 package com.swdave.popular_movies_app_final.activities;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,11 +19,13 @@ import com.swdave.popular_movies_app_final.R;
 import com.swdave.popular_movies_app_final.adapters.ReviewAdapter;
 import com.swdave.popular_movies_app_final.adapters.TrailerAdapter;
 import com.swdave.popular_movies_app_final.api.JsonApi;
+import com.swdave.popular_movies_app_final.database.FavoritesDatabase;
 import com.swdave.popular_movies_app_final.model.MovieResults;
 import com.swdave.popular_movies_app_final.model.ReviewResponse;
 import com.swdave.popular_movies_app_final.model.ReviewResults;
 import com.swdave.popular_movies_app_final.model.TrailerResponse;
 import com.swdave.popular_movies_app_final.model.TrailerResults;
+import com.swdave.popular_movies_app_final.viewModel.FavoritesViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,16 +40,26 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DetailActivity extends AppCompatActivity {
 
     private static final String TAG = "DetailActivity";
-    private String mTitle;
     public static final String BASE_IMG_URL = "https://image.tmdb.org/t/p/w500";
     private static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
-    FloatingActionButton fab;
+
+    private FloatingActionButton fab;
     private JsonApi jsonApi;
+
+
+    private MovieResults mMovieResults;
+
     private String mMovieId;
+    private String mVoteAverage;
+    private String mTitle;
+    private String mPosterPath;
+    private String mBackdropPath;
+    private String mOverview;
+    private String mReleaseDate;
 
+    private FavoritesDatabase mDatabase;
 
-
-
+    private boolean isFavorite;
 
 
     // Trailers
@@ -63,8 +76,9 @@ public class DetailActivity extends AppCompatActivity {
     private ReviewAdapter mReviewAdapter;
     private RecyclerView mReviewRecyclerView;
 
+    //Favs
 
-
+    private FavoritesViewModel mFavoritesViewModel;
 
 
     @Override
@@ -75,57 +89,74 @@ public class DetailActivity extends AppCompatActivity {
         getIncomingIntent();
         setTitle(mTitle);
 
+        mDatabase = FavoritesDatabase.getInstance(this);
 
-
+        mFavoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         fab = findViewById(R.id.fab_favorites);
+
+        checkFav();
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO- FINISH BUTTON TO ADD TO FAVORITES
-                Toast.makeText(DetailActivity.this, "This will add to favorites later", Toast.LENGTH_SHORT).show();
-                fab.setImageResource(R.drawable.ic_star_yellow);
+                if (isFavorite) {
+                    deleteFav();
+                    Toast.makeText(DetailActivity.this, "Deleted" + mTitle + " from Database", Toast.LENGTH_SHORT).show();
+                } else {
+                    saveFav();
+                    Toast.makeText(DetailActivity.this, "Saved" + mTitle + " to Database", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
 
+    private void checkFav() {
+
+//        MovieResults movieResults = mDatabase.favoritesDao().getMovieById(mMovieId);
+//
+//        if (movieResults != null) {
+//            isFavorite = true;
+//            fab.setImageResource(R.drawable.ic_star_yellow);
+//        } else {
+//            isFavorite = false;
+//            fab.setImageResource(R.drawable.ic_star_empty);
+//        }
     }
 
     private void getIncomingIntent() {
         Log.d(TAG, "getIncomingIntent: Checking for Intents");
 
-
-
         Intent intent = getIntent();
-        MovieResults movieResults = intent.getParcelableExtra("Movie Details");
+        mMovieResults = intent.getParcelableExtra("Movie Details");
 
-        String id = movieResults.getId();
-        mMovieId = id;
-        String voteAverage = movieResults.getVoteAverage();
-        String title = movieResults.getTitle();
-        mTitle = title;
-        String posterPath = movieResults.getPosterPath();
-        String backDropPath = movieResults.getBackdropPath();
-        String overview = movieResults.getOverview();
-        String releaseDate = movieResults.getReleaseDate();
+        mMovieId = mMovieResults.getMovieId();
+        mVoteAverage = mMovieResults.getVoteAverage();
+        mTitle = mMovieResults.getTitle();
+        mPosterPath = mMovieResults.getPosterPath();
+        mBackdropPath = mMovieResults.getBackdropPath();
+        mOverview = mMovieResults.getOverview();
+        mReleaseDate = mMovieResults.getReleaseDate();
 
         TextView movieTitle = findViewById(R.id.movie_title);
-        movieTitle.setText(title);
+        movieTitle.setText(mTitle);
 
         TextView movieOverview = findViewById(R.id.synopsis);
-        movieOverview.setText(overview);
+        movieOverview.setText(mOverview);
 
         TextView movieUserRating = findViewById(R.id.user_rating_data);
-        movieUserRating.setText(voteAverage);
+        movieUserRating.setText(mVoteAverage);
 
         TextView movieReleaseDate = findViewById(R.id.release_date_data);
 
         // Takes yyyy-MM-dd converts to MM/dd/yyyy
-        String[] parts = releaseDate.split("-");
+        String[] parts = mReleaseDate.split("-");
         String updatedReleaseDate = parts[1] + "/" + parts[2] + "/" + parts[0];
         movieReleaseDate.setText(updatedReleaseDate);
 
         ImageView image = findViewById(R.id.movie_backdrop);
         Glide.with(this)
-                .load(BASE_IMG_URL + backDropPath)
+                .load(BASE_IMG_URL + mBackdropPath)
                 .into(image);
         Log.d(TAG, "getIncomingIntent: Intents completed");
 
@@ -223,20 +254,28 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    private void initTrailerRecyclerView(){
+    private void initTrailerRecyclerView() {
 
         mTrailerRecyclerView = findViewById(R.id.trailer_rv);
         mTrailerRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mTrailerRecyclerView.setLayoutManager(layoutManager);
 
     }
 
-    private void initReviewRecyclerView(){
+    private void initReviewRecyclerView() {
         mReviewRecyclerView = findViewById(R.id.reviews_rv);
         mReviewRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         mReviewRecyclerView.setLayoutManager(layoutManager);
 
+    }
+
+    private void saveFav() {
+        mFavoritesViewModel.insert(mMovieResults);
+    }
+
+    private void deleteFav() {
+        mFavoritesViewModel.delete(mMovieResults);
     }
 }
