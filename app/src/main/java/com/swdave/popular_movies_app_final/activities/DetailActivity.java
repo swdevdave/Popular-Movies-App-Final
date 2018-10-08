@@ -1,6 +1,5 @@
 package com.swdave.popular_movies_app_final.activities;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,7 +18,6 @@ import com.swdave.popular_movies_app_final.R;
 import com.swdave.popular_movies_app_final.adapters.ReviewAdapter;
 import com.swdave.popular_movies_app_final.adapters.TrailerAdapter;
 import com.swdave.popular_movies_app_final.api.JsonApi;
-import com.swdave.popular_movies_app_final.database.FavoritesDatabase;
 import com.swdave.popular_movies_app_final.model.MovieResults;
 import com.swdave.popular_movies_app_final.model.ReviewResponse;
 import com.swdave.popular_movies_app_final.model.ReviewResults;
@@ -49,17 +47,8 @@ public class DetailActivity extends AppCompatActivity {
 
     private MovieResults mMovieResults;
 
-    private String mMovieId;
-    private String mVoteAverage;
+    private int mMovieId;
     private String mTitle;
-    private String mPosterPath;
-    private String mBackdropPath;
-    private String mOverview;
-    private String mReleaseDate;
-
-    private FavoritesDatabase mDatabase;
-
-    private boolean isFavorite;
 
 
     // Trailers
@@ -89,24 +78,23 @@ public class DetailActivity extends AppCompatActivity {
         getIncomingIntent();
         setTitle(mTitle);
 
-        mDatabase = FavoritesDatabase.getInstance(this);
+        //mDatabase = FavoritesDatabase.getInstance(this);
 
-        mFavoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+        //mFavoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         fab = findViewById(R.id.fab_favorites);
 
-        checkFav();
-
+        //checkFav();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isFavorite) {
-                    deleteFav();
-                    Toast.makeText(DetailActivity.this, "Deleted" + mTitle + " from Database", Toast.LENGTH_SHORT).show();
-                } else {
-                    saveFav();
+//                if (isFavorite) {
+//                    deleteFav();
+//                    Toast.makeText(DetailActivity.this, "Deleted" + mTitle + " from Database", Toast.LENGTH_SHORT).show();
+//                } else {
+                //saveFav();
                     Toast.makeText(DetailActivity.this, "Saved" + mTitle + " to Database", Toast.LENGTH_SHORT).show();
-                }
+
             }
         });
     }
@@ -128,15 +116,14 @@ public class DetailActivity extends AppCompatActivity {
         Log.d(TAG, "getIncomingIntent: Checking for Intents");
 
         Intent intent = getIntent();
-        mMovieResults = intent.getParcelableExtra("Movie Details");
+        mMovieResults = intent.getParcelableExtra("Movie");
 
-        mMovieId = mMovieResults.getMovieId();
-        mVoteAverage = mMovieResults.getVoteAverage();
+        mMovieId = mMovieResults.getId();
+        String mVoteAverage = mMovieResults.getVoteAverage();
         mTitle = mMovieResults.getTitle();
-        mPosterPath = mMovieResults.getPosterPath();
-        mBackdropPath = mMovieResults.getBackdropPath();
-        mOverview = mMovieResults.getOverview();
-        mReleaseDate = mMovieResults.getReleaseDate();
+        String mBackdropPath = mMovieResults.getBackdropPath();
+        String mOverview = mMovieResults.getOverview();
+        String mReleaseDate = mMovieResults.getReleaseDate();
 
         TextView movieTitle = findViewById(R.id.movie_title);
         movieTitle.setText(mTitle);

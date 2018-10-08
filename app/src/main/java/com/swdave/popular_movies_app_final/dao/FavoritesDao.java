@@ -6,9 +6,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
-import android.arch.persistence.room.Update;
 
-import com.swdave.popular_movies_app_final.model.MiniMovie;
 import com.swdave.popular_movies_app_final.model.MovieResults;
 
 import java.util.List;
@@ -28,7 +26,7 @@ public interface FavoritesDao {
     @Query("SELECT * FROM favorites_table ORDER BY id DESC")
     LiveData<List<MovieResults>> getAllFavorites();
 
-    @Query("SELECT * FROM favorites_table WHERE id = :id")
-    LiveData<List<MovieResults>> getMovieById(String id);
+//    @Query("SELECT * FROM favorites_table WHERE id = :id")
+//    LiveData<List<MovieResults>> getMovieById(String id);
 
 }

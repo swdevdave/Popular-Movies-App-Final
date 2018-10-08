@@ -26,7 +26,6 @@ public class FavoritesViewModel extends AndroidViewModel {
         favoritesRepository.insert(fav);
     }
 
-
     public void delete(MovieResults fav){
         favoritesRepository.delete(fav);
     }
@@ -38,11 +37,6 @@ public class FavoritesViewModel extends AndroidViewModel {
     public LiveData<List<MovieResults>> getAllFavorites(){
         return allFavorites;
     }
-
-    public LiveData<List<MovieResults>> getMovieById(){
-        return allFavorites;
-    }
-
 
 
 }

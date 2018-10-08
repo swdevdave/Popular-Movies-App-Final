@@ -10,15 +10,13 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Objects;
 
 @Entity(tableName = "favorites_table")
 public class MovieResults implements Parcelable {
 
     @PrimaryKey
     @NonNull
-    @ColumnInfo(name = "id")
-    private String movieId;
+    private int id;
 
     @ColumnInfo(name = "vote_average")
     @SerializedName("vote_average")
@@ -31,6 +29,7 @@ public class MovieResults implements Parcelable {
     private String posterPath;
 
     @ColumnInfo(name = "backdrop_path")
+
     @SerializedName("backdrop_path")
     private String backdropPath;
 
@@ -40,9 +39,9 @@ public class MovieResults implements Parcelable {
     @SerializedName("release_date")
     private String releaseDate;
 
-    public MovieResults(@NonNull String movieId, String voteAverage, String title, String posterPath, String backdropPath, String overview, String releaseDate) {
+    public MovieResults(int id, String voteAverage, String title, String posterPath, String backdropPath, String overview, String releaseDate) {
 
-        this.movieId = movieId;
+        this.id = id;
         this.voteAverage = voteAverage;
         this.title = title;
         this.posterPath = posterPath;
@@ -54,7 +53,7 @@ public class MovieResults implements Parcelable {
 
     @Ignore
     protected MovieResults(Parcel in) {
-        movieId = Objects.requireNonNull(in.readString());
+        id = in.readInt();
         voteAverage = in.readString();
         title = in.readString();
         posterPath = in.readString();
@@ -76,10 +75,8 @@ public class MovieResults implements Parcelable {
         }
     };
 
-
-    @NonNull
-    public String getMovieId() {
-        return movieId;
+    public int getId() {
+        return id;
     }
 
     public String getVoteAverage() {
@@ -114,7 +111,7 @@ public class MovieResults implements Parcelable {
     @Ignore
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(movieId);
+        parcel.writeInt(id);
         parcel.writeString(voteAverage);
         parcel.writeString(title);
         parcel.writeString(posterPath);

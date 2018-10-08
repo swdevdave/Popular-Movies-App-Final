@@ -41,9 +41,6 @@ public class FavoritesRepository {
         return allFavorites;
     }
 
-    public LiveData<List<MovieResults>> getMovieById(){
-        return allFavorites;
-    }
 
     private static class InsertFavoritesAsyncTask extends AsyncTask<MovieResults,Void, Void>{
         private FavoritesDao favoritesDao;

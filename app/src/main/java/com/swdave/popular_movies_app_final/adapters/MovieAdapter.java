@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
-
 import com.swdave.popular_movies_app_final.R;
 import com.swdave.popular_movies_app_final.activities.DetailActivity;
 import com.swdave.popular_movies_app_final.model.MovieResults;
@@ -54,7 +53,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra("Movie Details", results.get(position));
+                intent.putExtra("Movie", results.get(position));
                 context.startActivity(intent);
             }
         });

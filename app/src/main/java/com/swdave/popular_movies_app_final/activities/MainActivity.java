@@ -220,7 +220,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.sort_by_favorites:
                 movieFlag = 3;
-                callFavs();
                 return true;
             case R.id.delete_favs:
                 favoritesViewModel.deleteAllFavorites();
