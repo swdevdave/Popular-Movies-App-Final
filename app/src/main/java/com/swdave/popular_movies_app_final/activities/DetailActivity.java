@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.swdave.popular_movies_app_final.R;
+import com.swdave.popular_movies_app_final.adapters.MovieAdapter;
 import com.swdave.popular_movies_app_final.adapters.ReviewAdapter;
 import com.swdave.popular_movies_app_final.adapters.TrailerAdapter;
 import com.swdave.popular_movies_app_final.api.JsonApi;
@@ -263,7 +264,8 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void deleteFav() {
-        mFavoritesViewModel.delete(mMovieResults);
+
+        mFavoritesViewModel.delete();
     }
 
 

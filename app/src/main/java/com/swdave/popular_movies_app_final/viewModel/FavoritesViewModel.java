@@ -21,13 +21,12 @@ public class FavoritesViewModel extends AndroidViewModel {
         allFavorites = favoritesRepository.getAllFavorites();
     }
 
-
-    public void insert(MovieResults fav){
-        favoritesRepository.insert(fav);
+    public void insert(MovieResults movieResults){
+        favoritesRepository.insert(movieResults);
     }
 
-    public void delete(MovieResults fav){
-        favoritesRepository.delete(fav);
+    public void delete(){
+        favoritesRepository.delete();
     }
 
     public void deleteAllFavorites() {
@@ -37,6 +36,10 @@ public class FavoritesViewModel extends AndroidViewModel {
     public LiveData<List<MovieResults>> getAllFavorites(){
         return allFavorites;
     }
+
+//    public checkDatabaseSize(){
+//        return
+//    }
 
 
 }

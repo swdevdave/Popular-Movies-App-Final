@@ -195,12 +195,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        checkFlag();
+
+    }
+
+    private void checkFlag(){
         if (movieFlag == 3) {
             callFavs();
         } else {
             callMovies();
         }
-
     }
 
     @Override
@@ -215,18 +219,19 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.sort_by_popular:
                 movieFlag = 1;
-                callMovies();
+                checkFlag();
                 return true;
             case R.id.sort_by_top_rated:
                 movieFlag = 2;
-                callMovies();
+                checkFlag();
                 return true;
             case R.id.sort_by_favorites:
                 movieFlag = 3;
-                initViews();
+                checkFlag();
                 return true;
             case R.id.delete_favs:
                 favoritesViewModel.deleteAllFavorites();
+                checkFlag();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -242,9 +247,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable List<MovieResults> movieResults) {
                 mMovieAdapter.setFavs(movieResults);
-
             }
         });
     }
+
+//    private void checkForDeleteAll(){
+//        if
+//
+//    }
 }
 

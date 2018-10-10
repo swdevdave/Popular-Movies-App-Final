@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface FavoritesDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert
     void insert(MovieResults movieResults);
 
     @Delete
@@ -25,6 +25,9 @@ public interface FavoritesDao {
 
     @Query("SELECT * FROM favorites_table ORDER BY id DESC")
     LiveData<List<MovieResults>> getAllFavorites();
+
+    @Query("SELECT * FROM favorites_table LIMIT 1")
+    MovieResults[]  getAnyResult();
 
 //    @Query("SELECT * FROM favorites_table WHERE id = :id")
 //    LiveData<List<MovieResults>> getMovieById(String id);
