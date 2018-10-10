@@ -19,7 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.swdave.popular_movies_app_final.R;
-import com.swdave.popular_movies_app_final.adapters.FavoritesAdapter;
 import com.swdave.popular_movies_app_final.adapters.MovieAdapter;
 import com.swdave.popular_movies_app_final.api.JsonApi;
 import com.swdave.popular_movies_app_final.model.MovieResponse;
@@ -40,13 +39,13 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private ArrayList<MovieResults> results;
+    private List<MovieResults> results;
 
 
     private RecyclerView movieRecyclerView;
 
     private MovieAdapter mMovieAdapter;
-    private FavoritesAdapter favoritesAdapter;
+
 
 
     private ProgressBar progressBar;
@@ -101,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkApi() {
         if (API_KEY.length() > 1) {
-            initViews();
+            buildBaseUrl();
+
         } else {
             errorText.setText("");
             errorText.setVisibility(View.VISIBLE);
@@ -123,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         jsonApi = retrofit.create(JsonApi.class);
+        initViews();
     }
 
 
@@ -194,9 +195,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        buildBaseUrl();
-        callMovies();
-
+        if (movieFlag == 3) {
+            callFavs();
+        } else {
+            callMovies();
+        }
 
     }
 
@@ -220,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.sort_by_favorites:
                 movieFlag = 3;
+                initViews();
                 return true;
             case R.id.delete_favs:
                 favoritesViewModel.deleteAllFavorites();
@@ -230,19 +234,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void callFavs(){
 
-        movieRecyclerView = findViewById(R.id.main_recycler_view);
-        movieRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
-        movieRecyclerView.setLayoutManager(layoutManager);
-
-        final FavoritesAdapter favoritesAdapter = new FavoritesAdapter();
-        movieRecyclerView.setAdapter(favoritesAdapter);
+        mMovieAdapter = new MovieAdapter(MainActivity.this, results);
+        movieRecyclerView.setAdapter(mMovieAdapter);
 
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         favoritesViewModel.getAllFavorites().observe(this, new Observer<List<MovieResults>>() {
             @Override
             public void onChanged(@Nullable List<MovieResults> movieResults) {
-                favoritesAdapter.setFavs(movieResults);
+                mMovieAdapter.setFavs(movieResults);
+
             }
         });
     }

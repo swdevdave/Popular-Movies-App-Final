@@ -59,7 +59,4 @@ public class AppExecutors {
             mainThreadHandler.post(runnable);
         }
     }
-
-
-
 }

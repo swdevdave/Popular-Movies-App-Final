@@ -1,5 +1,6 @@
 package com.swdave.popular_movies_app_final.activities;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -80,7 +81,7 @@ public class DetailActivity extends AppCompatActivity {
 
         //mDatabase = FavoritesDatabase.getInstance(this);
 
-        //mFavoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
+        mFavoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         fab = findViewById(R.id.fab_favorites);
 
         //checkFav();
@@ -92,9 +93,8 @@ public class DetailActivity extends AppCompatActivity {
 //                    deleteFav();
 //                    Toast.makeText(DetailActivity.this, "Deleted" + mTitle + " from Database", Toast.LENGTH_SHORT).show();
 //                } else {
-                //saveFav();
-                    Toast.makeText(DetailActivity.this, "Saved" + mTitle + " to Database", Toast.LENGTH_SHORT).show();
-
+                saveFav();
+                Toast.makeText(DetailActivity.this, "Saved " + mTitle + " to Database", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -265,4 +265,6 @@ public class DetailActivity extends AppCompatActivity {
     private void deleteFav() {
         mFavoritesViewModel.delete(mMovieResults);
     }
+
+
 }

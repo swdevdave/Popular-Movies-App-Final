@@ -16,15 +16,16 @@ import com.swdave.popular_movies_app_final.activities.DetailActivity;
 import com.swdave.popular_movies_app_final.model.MovieResults;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
-    private ArrayList<MovieResults> results;
+    private List<MovieResults> results = new ArrayList<>();
     private Context context;
     private static final String SMALL_POSTER_URL = "https://image.tmdb.org/t/p/w200";
 
 
-    public MovieAdapter(Context context, ArrayList<MovieResults> results) {
+    public MovieAdapter(Context context, List<MovieResults> results) {
         this.context = context;
         this.results = results;
 
@@ -42,6 +43,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public void onBindViewHolder(@NonNull MovieViewHolder holder, final int position) {
+
+        MovieResults currentMovie = results.get(position);
 
         // Loading img from Internet with Glide
         Glide.with(context)
@@ -79,5 +82,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         }
 
     }
+
+    public MovieResults getCurrentPosition(int position) {
+        return results.get(position);
+    }
+
+    public void setFavs(List<MovieResults> results) {
+        this.results = results;
+    }
+
 
 }
