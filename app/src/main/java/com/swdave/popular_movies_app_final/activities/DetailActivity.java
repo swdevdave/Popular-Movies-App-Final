@@ -1,5 +1,6 @@
 package com.swdave.popular_movies_app_final.activities;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -9,7 +10,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,19 +41,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private static final String TAG = "DetailActivity";
     public static final String BASE_IMG_URL = "https://image.tmdb.org/t/p/w500";
     private static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
 
+    // UI
     private FloatingActionButton fab;
+
+    // Data
     private JsonApi jsonApi;
-
-
     private MovieResults mMovieResults;
-
     private int mMovieId;
     private String mTitle;
     private FavoritesDatabase mDatabase;
+    private FavoritesViewModel mFavoritesViewModel;
 
 
     // Trailers
@@ -63,16 +63,14 @@ public class DetailActivity extends AppCompatActivity {
     private TrailerAdapter mTrailerAdapter;
     private RecyclerView mTrailerRecyclerView;
 
-    //Reviews
+    // Reviews
     private int mReviewSize = 0;
     private TextView mReviewsFound;
     private ArrayList<ReviewResults> mReviewResults;
     private ReviewAdapter mReviewAdapter;
     private RecyclerView mReviewRecyclerView;
 
-    //Favs
-
-    private FavoritesViewModel mFavoritesViewModel;
+    // Favs
     private Boolean mCheckResult;
 
 
@@ -80,7 +78,6 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        Log.d(TAG, "onCreate: Started");
         getIncomingIntent();
         setTitle(mTitle);
 
@@ -102,7 +99,6 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void getIncomingIntent() {
-        Log.d(TAG, "getIncomingIntent: Checking for Intents");
 
         Intent intent = getIntent();
         mMovieResults = intent.getParcelableExtra("Movie");
@@ -134,7 +130,6 @@ public class DetailActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(BASE_IMG_URL + mBackdropPath)
                 .into(image);
-        Log.d(TAG, "getIncomingIntent: Intents completed");
 
 
         buildBaseUrl();
@@ -145,7 +140,6 @@ public class DetailActivity extends AppCompatActivity {
 
 
     private void buildBaseUrl() {
-        Log.d(TAG, "buildBaseUrl: Started");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -161,8 +155,8 @@ public class DetailActivity extends AppCompatActivity {
 
         Call<ReviewResponse> call = jsonApi.getReviews(mMovieId, MainActivity.API_KEY);
 
-
         call.enqueue(new Callback<ReviewResponse>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(@NonNull Call<ReviewResponse> call, @NonNull Response<ReviewResponse> response) {
 
@@ -186,20 +180,17 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<ReviewResponse> call, Throwable t) {
                 mReviewsFound.setText(R.string.error_parsing_reviews);
-                Log.d(TAG, "onFailure: " + t.toString());
             }
         });
 
     }
 
     private void callTrailer() {
-        Log.d(TAG, "callPopularMovies: Started");
 
         Call<TrailerResponse> call = jsonApi.getTrailers(mMovieId, MainActivity.API_KEY);
 
-        Log.d(TAG, "\n" + "callTrailer: " + mMovieId + "\n" + "\n");
-
         call.enqueue(new Callback<TrailerResponse>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(@NonNull Call<TrailerResponse> call, @NonNull Response<TrailerResponse> response) {
 
@@ -224,7 +215,6 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<TrailerResponse> call, Throwable t) {
                 mTrailersFound.setText(R.string.trailer_parse_error);
-                Log.d(TAG, "onFailure: " + t.toString());
             }
         });
 
@@ -260,17 +250,18 @@ public class DetailActivity extends AppCompatActivity {
             });
             fab.setImageResource(R.drawable.ic_star_empty);
             mCheckResult = false;
-            Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Deleted " + mTitle + " from Favorites", Toast.LENGTH_SHORT).show();
         } else {
             mFavoritesViewModel.insert(mMovieResults);
             fab.setImageResource(R.drawable.ic_star_yellow);
             mCheckResult = true;
-            Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Added " + mTitle + " to Favorites", Toast.LENGTH_SHORT).show();
         }
     }
 
 
-    private class checkIfExists extends AsyncTask<Integer, Integer, Boolean> {
+    @SuppressLint("StaticFieldLeak")
+    protected class checkIfExists extends AsyncTask<Integer, Integer, Boolean> {
 
         @Override
         protected Boolean doInBackground(Integer... integers) {

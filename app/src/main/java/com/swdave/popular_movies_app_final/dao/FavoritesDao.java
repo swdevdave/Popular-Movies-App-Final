@@ -2,7 +2,6 @@ package com.swdave.popular_movies_app_final.dao;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
-import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
@@ -16,9 +15,6 @@ public interface FavoritesDao {
     @Insert
     void insert(MovieResults movieResults);
 
-    @Delete
-    void delete(MovieResults movieResults);
-
     @Query("DELETE FROM favorites_table")
     void deleteAllFavorites();
 
@@ -30,6 +26,5 @@ public interface FavoritesDao {
 
     @Query("SELECT COUNT(id) FROM favorites_table WHERE id = :id")
     Integer ifExists(int id);
-
 
 }

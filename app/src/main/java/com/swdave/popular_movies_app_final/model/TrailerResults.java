@@ -18,7 +18,7 @@ public class TrailerResults {
         return key;
     }
 
-    public String getYoutubeUrl(){
+    public String getYoutubeUrl() {
         return BASE_YOUTUBE_URL + key;
     }
 
@@ -29,7 +29,6 @@ public class TrailerResults {
     public String getName() {
         return name;
     }
-
 
 
 }

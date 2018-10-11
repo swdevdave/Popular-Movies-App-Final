@@ -24,28 +24,25 @@ public class FavoritesRepository {
 
     }
 
-    public void insert(MovieResults fav){
+    public void insert(MovieResults fav) {
         new InsertFavoritesAsyncTask(favoritesDao).execute(fav);
 
     }
 
-    public void delete(){
-        new DeleteFavoritesAsyncTask(favoritesDao).execute();
-    }
 
-    public void deleteAllFavorites(){
+    public void deleteAllFavorites() {
         new DeleteAllFavoritesAsyncTask(favoritesDao).execute();
     }
 
-    public LiveData<List<MovieResults>> getAllFavorites(){
+    public LiveData<List<MovieResults>> getAllFavorites() {
         return allFavorites;
     }
 
 
-    private static class InsertFavoritesAsyncTask extends AsyncTask<MovieResults,Void, Void>{
+    private static class InsertFavoritesAsyncTask extends AsyncTask<MovieResults, Void, Void> {
         private FavoritesDao favoritesDao;
 
-        private InsertFavoritesAsyncTask(FavoritesDao favoritesDao){
+        private InsertFavoritesAsyncTask(FavoritesDao favoritesDao) {
             this.favoritesDao = favoritesDao;
         }
 
@@ -56,24 +53,11 @@ public class FavoritesRepository {
         }
     }
 
-    private static class DeleteFavoritesAsyncTask extends AsyncTask<MovieResults,Void, Void>{
+
+    private static class DeleteAllFavoritesAsyncTask extends AsyncTask<Void, Void, Void> {
         private FavoritesDao favoritesDao;
 
-        private DeleteFavoritesAsyncTask(FavoritesDao favoritesDao){
-            this.favoritesDao = favoritesDao;
-        }
-
-        @Override
-        protected Void doInBackground(MovieResults... movieResults) {
-            favoritesDao.delete(movieResults[0]);
-            return null;
-        }
-    }
-
-    private static class DeleteAllFavoritesAsyncTask extends AsyncTask<Void,Void, Void>{
-        private FavoritesDao favoritesDao;
-
-        private DeleteAllFavoritesAsyncTask(FavoritesDao favoritesDao){
+        private DeleteAllFavoritesAsyncTask(FavoritesDao favoritesDao) {
             this.favoritesDao = favoritesDao;
         }
 

@@ -14,54 +14,6 @@ import com.google.gson.annotations.SerializedName;
 @Entity(tableName = "favorites_table")
 public class MovieResults implements Parcelable {
 
-    @PrimaryKey
-    @NonNull
-    private int id;
-
-    @ColumnInfo(name = "vote_average")
-    @SerializedName("vote_average")
-    private String voteAverage;
-
-    private String title;
-
-    @ColumnInfo(name = "poster_path")
-    @SerializedName("poster_path")
-    private String posterPath;
-
-    @ColumnInfo(name = "backdrop_path")
-
-    @SerializedName("backdrop_path")
-    private String backdropPath;
-
-    private String overview;
-
-    @ColumnInfo(name = "release_date")
-    @SerializedName("release_date")
-    private String releaseDate;
-
-    public MovieResults(int id, String voteAverage, String title, String posterPath, String backdropPath, String overview, String releaseDate) {
-
-        this.id = id;
-        this.voteAverage = voteAverage;
-        this.title = title;
-        this.posterPath = posterPath;
-        this.backdropPath = backdropPath;
-        this.overview = overview;
-        this.releaseDate = releaseDate;
-    }
-
-
-    @Ignore
-    protected MovieResults(Parcel in) {
-        id = in.readInt();
-        voteAverage = in.readString();
-        title = in.readString();
-        posterPath = in.readString();
-        backdropPath = in.readString();
-        overview = in.readString();
-        releaseDate = in.readString();
-    }
-
     @Ignore
     public static final Creator<MovieResults> CREATOR = new Creator<MovieResults>() {
         @Override
@@ -74,6 +26,47 @@ public class MovieResults implements Parcelable {
             return new MovieResults[size];
         }
     };
+    @PrimaryKey
+    @NonNull
+    private int id;
+    @ColumnInfo(name = "vote_average")
+    @SerializedName("vote_average")
+    private String voteAverage;
+    private String title;
+    @ColumnInfo(name = "poster_path")
+    @SerializedName("poster_path")
+    private String posterPath;
+    @ColumnInfo(name = "backdrop_path")
+
+    @SerializedName("backdrop_path")
+    private String backdropPath;
+    private String overview;
+    @ColumnInfo(name = "release_date")
+    @SerializedName("release_date")
+    private String releaseDate;
+
+
+    public MovieResults(int id, String voteAverage, String title, String posterPath, String backdropPath, String overview, String releaseDate) {
+
+        this.id = id;
+        this.voteAverage = voteAverage;
+        this.title = title;
+        this.posterPath = posterPath;
+        this.backdropPath = backdropPath;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+    }
+
+    @Ignore
+    protected MovieResults(Parcel in) {
+        id = in.readInt();
+        voteAverage = in.readString();
+        title = in.readString();
+        posterPath = in.readString();
+        backdropPath = in.readString();
+        overview = in.readString();
+        releaseDate = in.readString();
+    }
 
     public int getId() {
         return id;

@@ -13,9 +13,7 @@ public abstract class FavoritesDatabase extends RoomDatabase {
 
     private static FavoritesDatabase instance;
 
-    public abstract FavoritesDao favoritesDao();
-
-    public static synchronized FavoritesDatabase getInstance(Context context){
+    public static synchronized FavoritesDatabase getInstance(Context context) {
 
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
@@ -25,4 +23,6 @@ public abstract class FavoritesDatabase extends RoomDatabase {
         }
         return instance;
     }
+
+    public abstract FavoritesDao favoritesDao();
 }

@@ -1,6 +1,5 @@
 package com.swdave.popular_movies_app_final.adapters;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -44,11 +43,11 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewHold
         return mReview.size();
     }
 
-    public static class ReviewHolder extends RecyclerView.ViewHolder{
+    static class ReviewHolder extends RecyclerView.ViewHolder {
 
         TextView author, content;
 
-        public ReviewHolder(@NonNull View itemView) {
+        ReviewHolder(@NonNull View itemView) {
             super(itemView);
 
             author = itemView.findViewById(R.id.review_author);

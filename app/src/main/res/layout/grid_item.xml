@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/movie_parent_layout"
     android:layout_width="200dp"
     android:layout_height="wrap_content"
-    android:background="@drawable/custom_item_layout"
-    android:id="@+id/movie_parent_layout">
+    android:background="@drawable/custom_item_layout">
 
     <ImageView
         android:id="@+id/posterImg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/poster_image"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/poster_image" />
 
 </RelativeLayout>

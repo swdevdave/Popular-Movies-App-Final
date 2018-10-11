@@ -2,8 +2,12 @@ package com.swdave.popular_movies_app_final.activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.graphics.Rect;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -36,30 +40,24 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/* App by Dave King Udacity Android Developer NanoDegree - Completed 10/10/2018 */
+
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    //TODO: Enter API Key Below
+    public static final String API_KEY = "";
+    private static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
 
     private List<MovieResults> results;
-
-
     private RecyclerView movieRecyclerView;
-
     private MovieAdapter mMovieAdapter;
-
-
-
     private ProgressBar progressBar;
     private ImageView noConnection;
     private TextView errorText;
     private Button retryButton;
     private JsonApi jsonApi;
 
-    public static final String API_KEY = "a1a00c2be1584838bc50f724c943db32";
-    private static final String BASE_URL = "https://api.themoviedb.org/3/movie/";
-
     private int movieFlag = 1;
-
     private FavoritesViewModel favoritesViewModel;
 
 
@@ -67,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
@@ -79,8 +76,7 @@ public class MainActivity extends AppCompatActivity {
         errorText.setVisibility(View.GONE);
 
         progressBar = findViewById(R.id.progress_bar);
-        progressBar.setVisibility(View.GONE);
-
+        progressBar.setVisibility(View.VISIBLE);
 
         movieRecyclerView = findViewById(R.id.main_recycler_view);
 
@@ -91,16 +87,45 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                // click for retry TODO
+                noConnection.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
+                retryButton.setVisibility(View.GONE);
+                errorText.setVisibility(View.GONE);
+                errorText.setText("");
+                checkConnection();
             }
         });
+        checkConnection();
+    }
 
-        checkApi();
+    private void checkConnection() {
+        if (isConnected()) {
+            checkApi();
+        } else {
+            errorText.setText("");
+            errorText.setVisibility(View.VISIBLE);
+            errorText.setText(R.string.no_connection);
+            retryButton.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+            noConnection.setVisibility(View.VISIBLE);
+        }
+    }
 
-
+    private boolean isConnected() {
+        boolean connected = false;
+        try {
+            ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo nInfo = cm.getActiveNetworkInfo();
+            connected = nInfo != null && nInfo.isConnected();
+            return connected;
+        } catch (Exception e) {
+            Log.e("Connectivity Exception", e.getMessage());
+        }
+        return connected;
     }
 
     private void checkApi() {
+
         if (API_KEY.length() > 1) {
             buildBaseUrl();
 
@@ -113,12 +138,10 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
             noConnection.setVisibility(View.GONE);
 
-
         }
     }
 
     private void buildBaseUrl() {
-        Log.d(TAG, "buildBaseUrl: Started");
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -135,15 +158,17 @@ public class MainActivity extends AppCompatActivity {
 
         if (movieFlag == 1) {
             call = jsonApi.getPopular(API_KEY);
-        } if (movieFlag == 2) {
+        }
+        if (movieFlag == 2) {
             call = jsonApi.getTopRated(API_KEY);
         }
 
         call.enqueue(new Callback<MovieResponse>() {
             @Override
-            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+            public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
 
                 MovieResponse jsonMovieResponse = response.body();
+                assert jsonMovieResponse != null;
                 results = new ArrayList<>(Arrays.asList(jsonMovieResponse.getResults()));
 
                 mMovieAdapter = new MovieAdapter(MainActivity.this, results);
@@ -157,11 +182,9 @@ public class MainActivity extends AppCompatActivity {
                 retryButton.setVisibility(View.VISIBLE);
                 progressBar.setVisibility(View.GONE);
                 errorText.setText("Error" + t.getMessage());
-
-
             }
         });
-
+        progressBar.setVisibility(View.GONE);
     }
 
 
@@ -202,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void checkFlag(){
+    private void checkFlag() {
         if (movieFlag == 3) {
             callFavs();
         } else {
@@ -241,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void callFavs(){
+    private void callFavs() {
 
         favoritesViewModel.getAllFavorites().observe(this, new Observer<List<MovieResults>>() {
             @Override

@@ -33,6 +33,6 @@
     <item
         android:id="@+id/delete_favs"
         android:title="@string/delete_favorites"
-        app:showAsAction="never"/>
+        app:showAsAction="never" />
 
 </menu>

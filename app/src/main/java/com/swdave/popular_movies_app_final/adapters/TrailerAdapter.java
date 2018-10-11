@@ -62,12 +62,12 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerH
     }
 
 
-    public class TrailerHolder extends RecyclerView.ViewHolder {
+    class TrailerHolder extends RecyclerView.ViewHolder {
 
         TextView trailerName;
         ImageView trailerImage;
 
-        public TrailerHolder(View itemView) {
+        TrailerHolder(View itemView) {
             super(itemView);
 
             trailerImage = itemView.findViewById(R.id.trailer_sample_image);
