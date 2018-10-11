@@ -11,6 +11,7 @@ All Knowledge of Stage 1 plus:
 - Parcable
 - MVVM - Android Archetecure Componenets
 - Retrofit 2
+- CardView
 
 # Description
 Stage 2: Trailers, Reviews, and Favorites
