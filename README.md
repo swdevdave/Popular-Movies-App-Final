@@ -5,11 +5,14 @@
 - [Android Developer Nanodegree
 Syllabus](https://docs.google.com/document/d/1ZlN1fUsCSKuInLECcJkslIqvpKlP7jWL2TP9m6UiA6I/pub?embedded=true#h.7sxo8jefdfll)
 
+- Reworked Stage 1 project for much better UI/UX
+
 ## Android Knowledge
 
 All Knowledge of Stage 1 plus:
+
 - Parcable
-- MVVM - Android Archetecure Componenets
+- MVVM - Android Archetecure Componenets (Room, ViewModel, and LiveData)
 - Retrofit 2
 - CardView
 
