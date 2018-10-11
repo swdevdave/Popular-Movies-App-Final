@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.swdave.popular_movies_app_final.R;
 import com.swdave.popular_movies_app_final.adapters.MovieAdapter;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
 
         // No Network icon
         noConnection = findViewById(R.id.no_network_iv);
@@ -143,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
                 MovieResponse jsonMovieResponse = response.body();
                 results = new ArrayList<>(Arrays.asList(jsonMovieResponse.getResults()));
+
                 mMovieAdapter = new MovieAdapter(MainActivity.this, results);
                 movieRecyclerView.setAdapter(mMovieAdapter);
             }
@@ -230,30 +233,34 @@ public class MainActivity extends AppCompatActivity {
                 checkFlag();
                 return true;
             case R.id.delete_favs:
-                favoritesViewModel.deleteAllFavorites();
+                checkFavEmpty();
                 checkFlag();
                 return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private void callFavs(){
 
-        mMovieAdapter = new MovieAdapter(MainActivity.this, results);
-        movieRecyclerView.setAdapter(mMovieAdapter);
-
-        favoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         favoritesViewModel.getAllFavorites().observe(this, new Observer<List<MovieResults>>() {
             @Override
             public void onChanged(@Nullable List<MovieResults> movieResults) {
                 mMovieAdapter.setFavs(movieResults);
+                movieRecyclerView.setAdapter(mMovieAdapter);
+
             }
         });
     }
 
-//    private void checkForDeleteAll(){
-//        if
-//
-//    }
+    private void checkFavEmpty() {
+        try {
+            favoritesViewModel.deleteAllFavorites();
+            Toast.makeText(this, "All Favorites Deleted", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Error: " + e + " Trying to Delete Favorites", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
 

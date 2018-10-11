@@ -37,10 +37,6 @@ public class FavoritesRepository {
         new DeleteAllFavoritesAsyncTask(favoritesDao).execute();
     }
 
-    public void checkDatabaseSize(){
-        new CheckDatabaseSizeAsyncTask(favoritesDao).execute();
-    }
-
     public LiveData<List<MovieResults>> getAllFavorites(){
         return allFavorites;
     }
@@ -84,21 +80,6 @@ public class FavoritesRepository {
         @Override
         protected Void doInBackground(Void... Voids) {
             favoritesDao.deleteAllFavorites();
-            return null;
-        }
-    }
-
-    private static class CheckDatabaseSizeAsyncTask extends AsyncTask<Void,Void, Void>{
-        private FavoritesDao favoritesDao;
-
-        private CheckDatabaseSizeAsyncTask(FavoritesDao favoritesDao){
-            this.favoritesDao = favoritesDao;
-        }
-
-        @Override
-        protected Void doInBackground(Void... Voids) {
-            if (favoritesDao.getAnyResult().length > 1){
-            }
             return null;
         }
     }

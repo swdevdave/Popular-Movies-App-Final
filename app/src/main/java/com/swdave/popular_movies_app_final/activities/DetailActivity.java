@@ -2,6 +2,7 @@ package com.swdave.popular_movies_app_final.activities;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,10 +17,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.swdave.popular_movies_app_final.R;
-import com.swdave.popular_movies_app_final.adapters.MovieAdapter;
 import com.swdave.popular_movies_app_final.adapters.ReviewAdapter;
 import com.swdave.popular_movies_app_final.adapters.TrailerAdapter;
 import com.swdave.popular_movies_app_final.api.JsonApi;
+import com.swdave.popular_movies_app_final.database.FavoritesDatabase;
+import com.swdave.popular_movies_app_final.executer.AppExecutors;
 import com.swdave.popular_movies_app_final.model.MovieResults;
 import com.swdave.popular_movies_app_final.model.ReviewResponse;
 import com.swdave.popular_movies_app_final.model.ReviewResults;
@@ -51,6 +53,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private int mMovieId;
     private String mTitle;
+    private FavoritesDatabase mDatabase;
 
 
     // Trailers
@@ -70,6 +73,7 @@ public class DetailActivity extends AppCompatActivity {
     //Favs
 
     private FavoritesViewModel mFavoritesViewModel;
+    private Boolean mCheckResult;
 
 
     @Override
@@ -80,37 +84,21 @@ public class DetailActivity extends AppCompatActivity {
         getIncomingIntent();
         setTitle(mTitle);
 
-        //mDatabase = FavoritesDatabase.getInstance(this);
+        mDatabase = FavoritesDatabase.getInstance(getApplicationContext());
 
         mFavoritesViewModel = ViewModelProviders.of(this).get(FavoritesViewModel.class);
         fab = findViewById(R.id.fab_favorites);
 
-        //checkFav();
+        checkIfExists task = new checkIfExists();
+        task.execute();
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if (isFavorite) {
-//                    deleteFav();
-//                    Toast.makeText(DetailActivity.this, "Deleted" + mTitle + " from Database", Toast.LENGTH_SHORT).show();
-//                } else {
-                saveFav();
-                Toast.makeText(DetailActivity.this, "Saved " + mTitle + " to Database", Toast.LENGTH_SHORT).show();
+                fabButtonClicked();
             }
         });
-    }
-
-    private void checkFav() {
-
-//        MovieResults movieResults = mDatabase.favoritesDao().getMovieById(mMovieId);
-//
-//        if (movieResults != null) {
-//            isFavorite = true;
-//            fab.setImageResource(R.drawable.ic_star_yellow);
-//        } else {
-//            isFavorite = false;
-//            fab.setImageResource(R.drawable.ic_star_empty);
-//        }
     }
 
     private void getIncomingIntent() {
@@ -259,14 +247,48 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    private void saveFav() {
-        mFavoritesViewModel.insert(mMovieResults);
+    public void fabButtonClicked() {
+
+        if (mCheckResult) {
+
+            AppExecutors.getsInstance().getDiskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    mDatabase.favoritesDao().deleteThisMovie(mMovieId);
+
+                }
+            });
+            fab.setImageResource(R.drawable.ic_star_empty);
+            mCheckResult = false;
+            Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show();
+        } else {
+            mFavoritesViewModel.insert(mMovieResults);
+            fab.setImageResource(R.drawable.ic_star_yellow);
+            mCheckResult = true;
+            Toast.makeText(this, "Added", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void deleteFav() {
 
-        mFavoritesViewModel.delete();
+    private class checkIfExists extends AsyncTask<Integer, Integer, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Integer... integers) {
+            Boolean checkResult;
+            Integer checkMovieId = mDatabase.favoritesDao().ifExists(mMovieResults.getId());
+            checkResult = checkMovieId > 0;
+            return checkResult;
+        }
+
+
+        @Override
+        protected void onPostExecute(Boolean checkResult) {
+            mCheckResult = checkResult;
+            if (mCheckResult) {
+                fab.setImageResource(R.drawable.ic_star_yellow);
+            } else {
+                fab.setImageResource(R.drawable.ic_star_empty);
+            }
+        }
     }
-
-
 }
