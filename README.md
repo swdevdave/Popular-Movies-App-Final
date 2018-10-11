@@ -3,8 +3,7 @@
 ## Project **Popular Movies App Stage 2 of 2** of Android Developer Nanodegree
 
 - [Android Devoper Nano Degree at Udacity.com](https://www.udacity.com/course/android-developer-nanodegree-by-google--nd801)
-- [Android Developer Nanodegree
-Syllabus](https://docs.google.com/document/d/1ZlN1fUsCSKuInLECcJkslIqvpKlP7jWL2TP9m6UiA6I/pub?embedded=true#h.7sxo8jefdfll)
+- [Popular Movies App Implementation Guide](https://docs.google.com/document/d/1ZlN1fUsCSKuInLECcJkslIqvpKlP7jWL2TP9m6UiA6I/pub?embedded=true#h.7sxo8jefdfll)
 
 - Reworked Stage 1 project for much better UI/UX
 
