@@ -11,8 +11,8 @@
 
 All knowledge of stage 1 plus:
 
-- Parcable
-- MVVM - Android Archetecure Componenets (Room, ViewModel, and LiveData)
+- Parceable
+- MVVM - Android Architecture Components (Room, ViewModel, and LiveData)
 - Retrofit 2
 - CardView
 
