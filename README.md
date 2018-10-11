@@ -33,10 +33,11 @@ You’ll modify the existing sorting criteria for the main view to include an ad
 <img src="https://github.com/swdevdave/PopularMoviesAppFinal/blob/master/SS2.png" height="400"/>&nbsp;&nbsp;&nbsp;
 <img src="https://github.com/swdevdave/PopularMoviesAppFinal/blob/master/SS3.png" height="400"/>&nbsp;&nbsp;&nbsp;
 <img src="https://github.com/swdevdave/PopularMoviesAppFinal/blob/master/SS4.png" height="400"/>&nbsp;&nbsp;&nbsp;
+<img src="https://github.com/swdevdave/PopularMoviesAppFinal/blob/master/SS5.png" height="400"/>&nbsp;&nbsp;&nbsp;
 
 PROJECT LICENSE
 
-This project was submitted by David King as part of the Nanodegree At Udacity.
+This project was submitted by David King as part of the Android Developer Nanodegree At Udacity.
 
 As part of Udacity Honor code, your submissions must be your own work, hence
 submitting this project as yours will cause you to break the Udacity Honor Code
